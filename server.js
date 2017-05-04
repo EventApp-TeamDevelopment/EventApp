@@ -50,6 +50,24 @@ app.use(function(req, res, next) {
 
 
 
+// ROUTES TO OUR PAGES
+
+app
+    .get('/', function(req, res) {
+        res.sendFile(path.join(`${__dirname}/public/index.html`));
+    })
+    .get('/event/:event_id', function(req, res) {
+        res.sendFile(path.join(__dirname + "/public/index.html"));
+    })
+
+    .get('/event_manage/:event_id', function(req, res) {
+        res.sendFile(path.join(__dirname + "/public/index.html"));
+    })
+
+    .get('/home', function(req, res) {
+        res.sendFile(path.join(__dirname + "/public/index.html"));
+    })
+
 
 
 //API router
@@ -167,6 +185,86 @@ apiRouter.route('/events/:event_id')
         });
     });
 
+
+
+
+
+// USERS ROUTE
+
+apiRouter.route('/users')
+
+    .post(function(req, res) {
+        // create a new instance of the User model
+        var user = new User();
+        // set the users information (comes from the request)
+        user.email = req.body.email;
+        user.password = req.body.password;
+        user.username = req.body.username;
+
+
+
+        // save the user and check for errors
+        user.save(function(err) {
+            if (err) {
+                // duplicate entry
+                if (err.code == 11000)
+                    return res.json({ success: false, message: 'A user with that username already exists. '});
+                else
+                    return res.send(err);
+            }
+            res.json({ message: 'User created!' });
+        });
+    })
+
+    .get(function(req, res) {
+        // res.sendFile(path.join(`${__dirname}/db/randomUsers.json`))
+        User.find(function(err, users) {
+            if(err) res.send(err);
+            res.json(users);
+        });
+    });
+
+
+
+//SHOULD BE FIXED
+
+
+apiRouter.route('/users/:email') // body parser is responsible for theese parameters
+    .get(function(req, res) {
+
+        User.findOne({
+
+            'email': req.params.email
+
+        }, function (err, user) {
+            if (err) res.send(err);
+            // return that user
+            res.json(user);
+        });
+    })
+
+
+    .put(function(req, res) {
+        User.findOneAndUpdate({
+                'email': req.params.email
+
+            }, {$set: {
+                //  username: req.params.username,
+                'age': req.body.age,
+                'gender': req.body.gender,
+                'phone': req.body.phone,
+                'homeTown': req.body.homeTown,
+                'subscribed': req.body.subscribed,
+                'createdEvents': req.body.createdEvents,
+                'userPhoto': req.body.userPhoto
+                //  interests: req.params.interests
+            } },
+
+            function(err, event) {
+                if(err) res.send(err)
+                res.json({message: 'Event updated!'});
+            });
+    })
 
 
 
