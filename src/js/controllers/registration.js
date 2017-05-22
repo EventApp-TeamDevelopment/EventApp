@@ -16,21 +16,21 @@ angular.module('mainApp')
 	// post user data on server
 
 	  sc.postData = function() {
-	    if(sc.user_password === sc.user_repassword) {
+			// validate password with regular expression
+      var patt = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+	    if(sc.user_password === sc.user_repassword && patt.test(sc.user_password)) {
 	      $http.post('http://localhost:8000/api/users/', {
 	        "email": sc.user_email,
 	        "username": sc.user_name,
 	        "password": sc.user_password,
 					"userPhoto": ''
-	      });
-
-	    } else {
-	      sc.errorMsg = 'Confirmation failed!';
-	      sc.user_password = '';
-	      sc.user_repassword = '';
-	    }
-
-	  };
+	      }); 
+    } else {
+      sc.errorMsg = 'Confirmation failed! Password should consist at least of 6 characters (numbers, both lower-case, upper-case letters)';
+      sc.user_password = '';
+      sc.user_repassword = '';
+    }
+  };
 
 	  sc.close = function () {
 	    uibModalInstance.close();
