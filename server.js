@@ -56,6 +56,11 @@ app
     .get('/', function(req, res) {
         res.sendFile(path.join(`${__dirname}/public/index.html`));
     })
+
+    .get('/about', function(req, res) {
+        res.sendFile(path.join(__dirname + "/public/index.html"));
+    })
+
     .get('/event/:event_id', function(req, res) {
         res.sendFile(path.join(__dirname + "/public/index.html"));
     })
@@ -68,6 +73,14 @@ app
         res.sendFile(path.join(__dirname + "/public/index.html"));
     })
 
+
+    .get('/faq', function(req, res) {
+        res.sendFile(path.join(__dirname + "/public/index.html"));
+    })
+
+    .get('/findus', function(req, res) {
+        res.sendFile(path.join(__dirname + "/public/index.html"));
+    });
 
 
 //API router
@@ -195,6 +208,10 @@ apiRouter.route('/users')
 
     .post(function(req, res) {
         // create a new instance of the User model
+        User.findOne({email: req.body.email}, function(err, document) {
+            console.log("Doc:" + document);
+            console.log("Err:" + err);
+        });
         var user = new User();
         // set the users information (comes from the request)
         user.email = req.body.email;
@@ -205,10 +222,12 @@ apiRouter.route('/users')
 
         // save the user and check for errors
         user.save(function(err) {
+            console.log("Err:" + err);
             if (err) {
+                console.log("Err:" + err);
                 // duplicate entry
                 if (err.code == 11000)
-                    return res.json({ success: false, message: 'A user with that username already exists. '});
+                    return res.status(401).json({message: 'A user with that email already exists. '});
                 else
                     return res.send(err);
             }
@@ -218,10 +237,28 @@ apiRouter.route('/users')
 
     .get(function(req, res) {
         // res.sendFile(path.join(`${__dirname}/db/randomUsers.json`))
-        User.find(function(err, users) {
-            if(err) res.send(err);
-            res.json(users);
-        });
+        if( req.query.email != undefined || req.query.email != null ) {
+            console.log("email:" + req.query.email);
+            User.findOne({
+
+                email: req.query.email
+
+            }, function (err, user) {
+                if (user == null) {
+                    res.status(401).send("User with email is not find");
+                } else {
+                    res.json(user);
+                }
+                // return that user
+
+            });
+        } else {
+            User.find(function(err, users) {
+                if(err) res.send(err);
+                res.json(users);
+            });
+        }
+
     });
 
 
@@ -229,7 +266,7 @@ apiRouter.route('/users')
 //SHOULD BE FIXED
 
 
-apiRouter.route('/users/:email') // body parser is responsible for theese parameters
+apiRouter.route('/users/:email') // body parser is responsible for these parameters
     .get(function(req, res) {
 
         User.findOne({
@@ -237,7 +274,7 @@ apiRouter.route('/users/:email') // body parser is responsible for theese parame
             'email': req.params.email
 
         }, function (err, user) {
-            if (err) res.send(err);
+            if (err) res.status(401).send(err);
             // return that user
             res.json(user);
         });

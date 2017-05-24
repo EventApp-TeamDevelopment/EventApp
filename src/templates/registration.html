@@ -2,38 +2,39 @@
             
 </div> -->
 <div id="modal-body" ng-app="myApp" ng-controller="generalCtrl">
-	    <div class="inner-container">
-    <video class="bgvid inner" autoplay="autoplay" muted="muted" preload="auto" loop>
-		<source src="./src/assets/clouds.webm" type="video/webm">
-    </video>
-	<div class="container-fluid form-content">
-		<h3 class="reg-title" id="modal-title">Registration</h3>
-		<img src="./src/assets/cancel.png" alt="" class="close-btn" ng-click="close()">
-		<form action="" class=" form-vertical" role="form" ng-submit="submitForm()">
-  			<div class="row inner-wrap">
-				<!-- <input type="text" placeholder="Username" class="field" required ng-model="user_regist.name">
-  				<input type="email" placeholder="Email address" class="field" required ng-model="user_regist.email">
-  				<input type="password" placeholder="Password" class="field" required ng-model="user_regist.password">
-  				<input type="password" placeholder="Confirm password" class="field" required ng-model="user_regist.repassword"> -->
+	<div class="inner-container">
+		<video class="bgvid inner" autoplay="autoplay" muted="muted" preload="auto" loop>
+			<source src="./src/assets/clouds.webm" type="video/webm">
+		</video>
+		<div class="container-fluid form-content">
+			<h3 class="reg-title" id="modal-title">Registration</h3>
+			<img src="./src/assets/cancel.png" alt="" class="close-btn" ng-click="close()">
+			<form action="" class=" form-vertical" role="form" ng-submit="submitForm()">
+				<div class="row inner-wrap">
+					<!-- <input type="text" placeholder="Username" class="field" required ng-model="user_regist.name">
+                      <input type="email" placeholder="Email address" class="field" required ng-model="user_regist.email">
+                      <input type="password" placeholder="Password" class="field" required ng-model="user_regist.password">
+                      <input type="password" placeholder="Confirm password" class="field" required ng-model="user_regist.repassword"> -->
 
 
-          <input type="text" placeholder="Username" class="field" required ng-model="user_name">
-    				<input type="email" placeholder="Email address" class="field" required ng-model="user_email">
-    				<input type="password" placeholder="Password" class="field" required ng-model="user_password">
-    				<input type="password" placeholder="Confirm password" class="field" required ng-model="user_repassword">
-            <div class="errorMsg"><span>{{errorMsg}}</span></div>
+					<input type="text" placeholder="Username" class="field" required ng-model="user_name">
+					<input type="email" placeholder="Email address" class="field" required ng-model="user.email" ng-change="changeEmail()">
+					<input type="password" placeholder="Password" class="field" required ng-model="user.password" ng-change="changePassword()">
+					<input type="password" placeholder="Confirm password" class="field" required ng-model="user.repassword">
+					<div class="errorMsg"><span>{{user.errorMsg}}</span></div>
 
-				<button type="submit" ng-click="postData()" class="save_btn submit-btn">Submit</button>
+					<button type="submit" ng-click="postData()" ng-disabled="user.isNotValid" class="save_btn submit-btn">Submit</button>
 
-<!-- 				<div class="separator">
-					<span class="interrupt-text">OR</span>
+					<!-- 				<div class="separator">
+                                        <span class="interrupt-text">OR</span>
+                                    </div>
+
+                                    <div class="auto-registr text-center">
+                                        <div class="google-registr"></div>
+                                        <div class="facebook-registr"></div>
+                                    </div> -->
 				</div>
-
-				<div class="auto-registr text-center">
-					<div class="google-registr"></div>
-					<div class="facebook-registr"></div>
-				</div> -->
-  			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>
